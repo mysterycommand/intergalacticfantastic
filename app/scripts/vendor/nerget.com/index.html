@@ -30,6 +30,7 @@
             var canvas;
             function prepareFrame(field)
             {
+                console.log(field.width());
                 var canvas = document.getElementById("canvas");
                 if ((omx >= 0 && omx < displaySize && omy >= 0 && omy < displaySize) && mouseIsDown) {
                     var dx = mx - omx;
@@ -95,7 +96,7 @@
                     fieldRes = r;
                     field.setResolution(r, r);
                 }
-                updateRes();            
+                updateRes();
                 function getTopLeftOfElement(element) {
                     var top = 0;
                     var left = 0;
@@ -105,7 +106,7 @@
                     } while(element = element.offsetParent);
                     return {left: left, top: top};
                 }
-            
+
                 canvas.onmousedown = function(event) {
                     var o = getTopLeftOfElement(canvas);
                     omx = mx = event.clientX - o.left;

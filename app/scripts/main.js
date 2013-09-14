@@ -26,57 +26,66 @@ require([
 
         var main = document.getElementById('js-main');
         var canvas = document.getElementById('js-canvas');
-        var w = canvas.width = main.offsetWidth;
-        var h = canvas.height = main.offsetHeight;
+        var res = 8;
+        var w = canvas.width = Math.floor(main.offsetWidth / res);
+        var h = canvas.height = Math.floor(main.offsetHeight / res);
+
+        var displayW = w * res;
+        var displayH = h * res;
+        canvas.style.width = displayW + 'px';
+        canvas.style.height = displayH + 'px';
+
         var ctx = canvas.getContext('2d');
         // console.log(main);
         // console.log(canvas);
         // console.log(ctx);
 
-        var mouseDown = false;
-        var touches = [];
+        var pointerDown = false;
+        var ox, oy, x, y;
+        var str, hex;
+
         function onDown(event) {
             // console.log(event.type, event);
             event.preventDefault();
-            mouseDown = true;
-            touches = event.touches || [{
-                pageX: event.pageX,
-                pageY: event.pageY
-            }];
+            pointerDown = true;
+
+            str = (Math.random() * (0xFFFFFF + 1) << 0).toString(16);
+            hex = '#' + (new Array(7 - str.length).join('0') + str);
+            ox = x = event.pageX;
+            oy = y = event.pageY;
+
             canvas.addEventListener('mousemove', onMove);
             canvas.addEventListener('touchmove', onMove);
         }
         function onMove(event) {
             // console.log(event.type, event);
             event.preventDefault();
-            touches = event.touches || [{
-                pageX: event.pageX,
-                pageY: event.pageY
-            }];
+
+            x = event.pageX;
+            y = event.pageY;
         }
         function onUp(event) {
             // console.log(event.type);
             event.preventDefault();
-            mouseDown = false;
-            touches = event.touches || [{
-                pageX: event.pageX,
-                pageY: event.pageY
-            }];
+            pointerDown = false;
+
             canvas.removeEventListener('mousemove', onMove);
             canvas.removeEventListener('touchmove', onMove);
         }
 
+        canvas.addEventListener('touchstart', onDown);
         canvas.addEventListener('mousedown', onDown);
+
+        canvas.addEventListener('touchend', onUp);
         canvas.addEventListener('mouseup', onUp);
 
-        canvas.addEventListener('touchstart', onDown);
-        canvas.addEventListener('touchend', onUp);
-
         var forEach = Array.prototype.forEach;
+        var PI2 = Math.PI * 2;
 
         var requestId = null;
         var isRunning = false;
         var then, now, d;
+        var dx, dy, len, px, py, i;
         var render = function(time) {
             requestId = window.requestAnimationFrame(render);
 
@@ -88,23 +97,26 @@ require([
             ctx.clearRect(0, 0, w, h);
 
             ctx.fillStyle = 'grey';
-            ctx.fillRect(50, 50, w - 100, h - 100);
+            ctx.fillRect(1, 1, w - 2, h - 2);
 
-            if ( ! mouseDown) { return; }
+            if ( ! pointerDown) { return; }
+            if ((0 <= ox && ox < displayW) &&
+                (0 <= oy && oy < displayH)) {
+                dx = x - ox;
+                dy = y - oy;
+                len = (Math.sqrt(dx * dx + dy * dy) + 0.5) | 0;
+                if (len < 1) { len = 1; }
 
-            forEach.call(touches, function(touch) {
-                if ( ! touch.hex) {
-                    var str = (Math.random() * (0xFFFFFF + 1) << 0).toString(16),
-                        hex = '#' + (new Array(7 - str.length).join('0') + str);
-                    touch.hex = hex;
-                }
+                // for (i = 0; i < len; ++i) {
+                //     px =
+                // }
 
-                ctx.fillStyle = touch.hex;
+                ctx.fillStyle = hex;
                 ctx.beginPath();
-                ctx.arc(touch.pageX, touch.pageY, 100, 0, Math.PI * 2, false);
+                ctx.arc(x / res, y / res, 10 / res, 0, PI2, false);
                 ctx.fill();
                 ctx.closePath();
-            });
+            }
         };
 
         function start() {
@@ -114,10 +126,18 @@ require([
 
         function stop() {
             window.cancelAnimationFrame(requestId);
+            ctx.clearRect(0, 0, w, h);
             isRunning = false;
         }
 
-        start();
+        if (window.Modernizr.touch) {
+            start();
+        } else {
+            window.addEventListener('keyup', function(event) {
+                if (event.which !== 32) { return; }
+                isRunning ? stop() : start();
+            });
+        }
 
     });
 
