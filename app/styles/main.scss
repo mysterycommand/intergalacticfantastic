@@ -27,12 +27,18 @@ $fore: #fafafa;
     width: 1px;
 }
 
+%transform-3d {
+    transform: translate3d(0,0,0);
+}
+
 html,
 body {
     height: 100%;
 }
 
 body {
+    @extend %transform-3d;
+
     background: $bkgd;
     color: $copy;
     display: flex;
@@ -46,12 +52,28 @@ body {
 }
 
 main {
+    @extend %transform-3d;
+
     background: $fore;
     height: 100%; //
     margin: auto;
 //    max-width: 960px; //
     overflow: hidden;
     width: 100%;
+}
+
+canvas {
+    @extend %transform-3d;
+
+    /* http://nullsleep.tumblr.com/post/16417178705/how-to-disable-image-smoothing-in-modern-web-browsers */
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
+
+    opacity: 0.999;
 }
 
 
