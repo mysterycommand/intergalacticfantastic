@@ -1,4 +1,3 @@
-# This Is Where I Will Put Notes
+# This Is Where I Will Put Notes [![Build Status](https://travis-ci.org/mysterycommand/intergalacticfantastic.png?branch=master)](https://travis-ci.org/mysterycommand/intergalacticfantastic)
 
 A note.
-[![Build Status](https://travis-ci.org/mysterycommand/intergalacticfantastic.png?branch=master)](https://travis-ci.org/mysterycommand/intergalacticfantastic)
