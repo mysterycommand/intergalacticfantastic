@@ -1,6 +1,7 @@
 {
   "name": "intergalacticfantastic",
   "version": "0.0.0",
+  "repository": "https://github.com/mysterycommand/intergalacticfantastic.git",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
