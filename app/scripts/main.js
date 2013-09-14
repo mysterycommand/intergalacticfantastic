@@ -42,15 +42,15 @@ require([
 
         var pointerDown = false;
         var ox, oy, x, y;
-        var str, hex;
+        // var str, hex;
 
         function onDown(event) {
             // console.log(event.type, event);
             event.preventDefault();
             pointerDown = true;
 
-            str = (Math.random() * (0xFFFFFF + 1) << 0).toString(16);
-            hex = '#' + (new Array(7 - str.length).join('0') + str);
+            // str = (Math.random() * (0xFFFFFF + 1) << 0).toString(16);
+            // hex = '#' + (new Array(7 - str.length).join('0') + str);
             ox = x = event.pageX;
             oy = y = event.pageY;
 
@@ -107,15 +107,21 @@ require([
                 len = (Math.sqrt(dx * dx + dy * dy) + 0.5) | 0;
                 if (len < 1) { len = 1; }
 
-                // for (i = 0; i < len; ++i) {
-                //     px =
-                // }
+                for (i = 0; i < len; ++i) {
+                    px = (((ox + dx * (i / len)) / displayW) * w) | 0;
+                    py = (((oy + dy * (i / len)) / displayH) * h) | 0;
 
-                ctx.fillStyle = hex;
-                ctx.beginPath();
-                ctx.arc(x / res, y / res, 10 / res, 0, PI2, false);
-                ctx.fill();
-                ctx.closePath();
+                    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                    ctx.fillRect(px, py, 1, 1);
+                }
+                ox = x;
+                oy = y;
+
+                // ctx.fillStyle = hex;
+                // ctx.beginPath();
+                // ctx.arc(x / res, y / res, 10 / res, 0, PI2, false);
+                // ctx.fill();
+                // ctx.closePath();
             }
         };
 

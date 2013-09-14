@@ -30,7 +30,6 @@
             var canvas;
             function prepareFrame(field)
             {
-                console.log(field.width());
                 var canvas = document.getElementById("canvas");
                 if ((omx >= 0 && omx < displaySize && omy >= 0 && omy < displaySize) && mouseIsDown) {
                     var dx = mx - omx;
@@ -124,7 +123,7 @@
                     my = event.clientY - o.top;
                 }
                 field.setDisplayFunction(toggleDisplayFunction(canvas));
-                startAnimation();
+                // startAnimation();
             }
         </script>
     </head>
