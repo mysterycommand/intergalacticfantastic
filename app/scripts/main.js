@@ -106,7 +106,18 @@ require([
                 ctx.closePath();
             });
         };
-        requestId = window.requestAnimationFrame(render);
+
+        function start() {
+            requestId = window.requestAnimationFrame(render);
+            isRunning = true;
+        }
+
+        function stop() {
+            window.cancelAnimationFrame(requestId);
+            isRunning = false;
+        }
+
+        start();
 
     });
 

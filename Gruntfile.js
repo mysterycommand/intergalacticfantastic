@@ -62,7 +62,8 @@ module.exports = function (grunt) {
                     // open: true,
                     base: [
                         '.tmp',
-                        yeomanConfig.app
+                        yeomanConfig.app,
+                        '.'
                     ]
                 }
             },
@@ -72,6 +73,7 @@ module.exports = function (grunt) {
                         '.tmp',
                         'test',
                         yeomanConfig.app,
+                        '.'
                     ]
                 }
             },
@@ -303,8 +305,8 @@ module.exports = function (grunt) {
                         '*.{ico,png,txt}',
                         '.htaccess',
                         'images/{,*/}*.{webp,gif}',
-                        'styles/fonts/{,*/}*.*',
-                        'bower_components/sass-bootstrap/fonts/*.*'
+                        'styles/fonts/{,*/}*.*'//,
+                        // 'bower_components/sass-bootstrap/fonts/*.*'
                     ]
                 }]
             },
@@ -318,7 +320,7 @@ module.exports = function (grunt) {
         },
         modernizr: {
             devFile: '<%= yeoman.app %>/bower_components/modernizr/modernizr.js',
-            outputFile: '<%= yeoman.dist %>/bower_components/modernizr/modernizr.js',
+            outputFile: '.tmp/bower_components/modernizr/modernizr.js',
             files: [
                 '<%= yeoman.dist %>/scripts/{,*/}*.js',
                 '<%= yeoman.dist %>/styles/{,*/}*.css',

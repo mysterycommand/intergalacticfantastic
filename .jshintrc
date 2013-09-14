@@ -2,7 +2,7 @@
     "node": true,
     "browser": true,
     "esnext": true,
-    "bitwise": true,
+    "bitwise": false,
     "camelcase": true,
     "curly": true,
     "eqeqeq": true,
@@ -14,12 +14,12 @@
     "quotmark": "single",
     "regexp": true,
     "undef": true,
-    "unused": true,
+    "unused": false,
     "strict": true,
     "trailing": true,
     "smarttabs": true,
     "jquery": true,
     "globals": {
-        "define": true,
+        "define": true
     }
 }
