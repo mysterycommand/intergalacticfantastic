@@ -47,6 +47,9 @@ require([
         var pointerDown = false;
         var ox, oy, x, y;
         // var str, hex;
+        var r = 128 + (Math.random() * 127 | 0),
+            g = 128 + (Math.random() * 127 | 0),
+            b = 128 + (Math.random() * 127 | 0);
 
         function onDown(event) {
             // console.log(event.type, event);
@@ -55,6 +58,7 @@ require([
 
             // str = (Math.random() * (0xFFFFFF + 1) << 0).toString(16);
             // hex = '#' + (new Array(7 - str.length).join('0') + str);
+
             ox = x = event.pageX;
             oy = y = event.pageY;
 
@@ -91,7 +95,7 @@ require([
         var then, now, d;
 
         var oldField = new Field(w, h);
-        var field;
+        var field = new Field(w, h);
 
         var render = function(time) {
             requestId = window.requestAnimationFrame(render);
@@ -101,12 +105,12 @@ require([
             d = now - then;
             then = now;
 
-            oldField.subLinearDensity(0.0025);
+            oldField.subLinearDensity(0.00125);
             draw(oldField);
 
             if ( ! pointerDown) { return; }
 
-            field = new Field(w, h);
+            field.empty();
             update(field);
 
             oldField.addFieldDensities(field);
@@ -125,7 +129,7 @@ require([
                     px = (((ox + dx * (i / len)) / displayW) * w) | 0;
                     py = (((oy + dy * (i / len)) / displayH) * h) | 0;
 
-                    field.setDensity(px, py, 0.1);
+                    field.setDensity(px, py, 0.2);
                 }
                 ox = x;
                 oy = y;
@@ -144,17 +148,17 @@ require([
         function draw(field) {
             bufferData = bufferCtx.createImageData(w, h);
             data = bufferData.data;
-            for (k = 0; k < data.length; ++k) { // set the whole buffer to 100% alpha white
-            // for (k = 3; k < data.length; k+=4) { // set the alpha channel to 100% alpha
+            // for (k = 0; k < data.length; ++k) { // set the whole buffer to 100% alpha white
+            for (k = 3; k < data.length; k+=4) { // set the alpha channel to 100% alpha
                 data[k] = 255;
             }
 
             for (col = 0; col < w; ++col) {
                 for (row = 0; row < h; ++row) {
-                    cel = field.getDensity(col, row) * 255;
-                    data[4 * (row * w + col) + 0] -= cel;
-                    data[4 * (row * w + col) + 1] -= cel;
-                    data[4 * (row * w + col) + 2] -= cel;
+                    cel = field.getDensity(col, row);
+                    data[4 * (row * w + col) + 0] += cel * r;
+                    data[4 * (row * w + col) + 1] += cel * g;
+                    data[4 * (row * w + col) + 2] += cel * b;
                 }
             }
 
@@ -162,6 +166,7 @@ require([
         }
 
         function start() {
+            // draw(oldField);
             requestId = window.requestAnimationFrame(render);
             isRunning = true;
         }
@@ -172,14 +177,13 @@ require([
             isRunning = false;
         }
 
-        if (IS_TOUCH) {
-            start();
-        } else {
+        if ( ! IS_TOUCH) {
             window.addEventListener('keyup', function(event) {
                 if (event.which !== 32) { return; }
                 isRunning ? stop() : start();
             });
         }
+        start();
 
     });
 

@@ -15,6 +15,14 @@ define([
 
     var forEach = Array.prototype.forEach;
 
+    function zeroArray(size) {
+        /* jshint newcap: false */
+        // Taken from: http://stackoverflow.com/questions/1295584/most-efficient-way-to-create-a-zero-filled-javascript-array
+        // Might not be super efficient to do it this way, but should work for now.
+        // TODO: investigate for optimizability.
+        return Array.apply(null, Array(size)).map(Number.prototype.valueOf, 0);
+    }
+
     function Field(w, h, ds, vx, vy) {
         if ( ! w || ! h) { throw new Error('w and h are required'); }
 
@@ -24,14 +32,6 @@ define([
         if (ds && ds.length !== this.size) { throw new Error('Expected ds to have a size of ' + this.size + ' instead found ' + ds.length + '.'); }
         if (vx && vx.length !== this.size) { throw new Error('Expected vx to have a size of ' + this.size + ' instead found ' + vx.length + '.'); }
         if (vy && vy.length !== this.size) { throw new Error('Expected vy to have a size of ' + this.size + ' instead found ' + vy.length + '.'); }
-
-        function zeroArray(size) {
-            /* jshint newcap: false */
-            // Taken from: http://stackoverflow.com/questions/1295584/most-efficient-way-to-create-a-zero-filled-javascript-array
-            // Might not be super efficient to do it this way, but should work for now.
-            // TODO: investigate for optimizability.
-            return Array.apply(null, Array(size)).map(Number.prototype.valueOf, 0);
-        }
 
         this._ds = new Float32Array(ds || zeroArray(this.size));
         this._vx = new Float32Array(vx || zeroArray(this.size));
@@ -71,6 +71,16 @@ define([
             enumerable: true,
             get: function() {
                 return (this._width + 2);
+            }
+        },
+        empty: {
+            configurable: true,
+            enumerable: true,
+            writable: false,
+            value: function() {
+                this._ds.set(zeroArray(this.size));
+                this._vx.set(zeroArray(this.size));
+                this._vy.set(zeroArray(this.size));
             }
         },
         setDensity: {
@@ -127,6 +137,7 @@ define([
                 if (this.size !== field.size) { throw new Error('Cannot add fields of differing sizes: ' + this.size + ', ' + field.size); }
                 for (var i = 0; i < field.size; ++i) {
                     this._ds[i] += field._ds[i];
+                    if (this._ds[i] > 1) { this._ds[i] = 1; }
                 }
             }
         },
@@ -138,6 +149,7 @@ define([
                 if (this.size !== field.size) { throw new Error('Cannot add fields of differing sizes: ' + this.size + ', ' + field.size); }
                 for (var i = 0; i < field.size; ++i) {
                     this._ds[i] -= field._ds[i];
+                    if (this._ds[i] < 0) { this._ds[i] = 0; }
                 }
             }
         },

@@ -27,7 +27,7 @@ $fore: #fafafa;
     width: 1px;
 }
 
-%transform-3d {
+%translate-3d {
     transform: translate3d(0,0,0);
 }
 
@@ -37,7 +37,7 @@ body {
 }
 
 body {
-    @extend %transform-3d;
+    @extend %translate-3d;
 
     background: $bkgd;
     color: $copy;
@@ -52,7 +52,7 @@ body {
 }
 
 main {
-    @extend %transform-3d;
+    @extend %translate-3d;
 
     background: $fore;
     height: 100%; //
@@ -63,7 +63,8 @@ main {
 }
 
 canvas {
-    @extend %transform-3d;
+    /* http://29a.ch/2011/5/27/fast-html5-canvas-on-iphone-mobile-safari-performance */
+    @extend %translate-3d;
 
     /* http://nullsleep.tumblr.com/post/16417178705/how-to-disable-image-smoothing-in-modern-web-browsers */
     image-rendering: optimizeSpeed;
@@ -72,6 +73,11 @@ canvas {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: optimize-contrast;
     -ms-interpolation-mode: nearest-neighbor;
+    /**
+     * DOESN'T WORK IN CHROME?
+     * @see http://jsfiddle.net/VAXrL/21/
+     * @see http://jsfiddle.net/worldhack/C4Q45/ <-- possible work around?
+     */
 
     opacity: 0.999;
 }
