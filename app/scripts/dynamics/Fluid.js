@@ -25,6 +25,22 @@ define([
     'use strict';
 
     function Fluid(canvas) {
+        var uiCallback = function(d,u,v) {},
+            iterations = 10,
+            // visc = 0.5,
+            dt = 0.2,
+            dens,
+            odens,
+            u,
+            ou,
+            v,
+            ov,
+            width,
+            height,
+            rowSize,
+            size,
+            displayFunc;
+
         function addFields(x, s, dt) {
             for (var i = 0; i < size; ++i) {
                 x[i] += dt*s[i];
@@ -261,35 +277,67 @@ define([
             advect(0, x, x0, u, v, dt );
         }
 
-        function swap(a, b) {
-            var tmp = a;
-            a = b;
-            b = tmp;
+        function swap(a, a0) {
+            var tmp = a0;
+            a0 = a;
+            a = tmp;
         }
 
         function velocityStep(u, v, u0, v0, dt) {
             // console.log('velocityStep');
-            addFields(u, u0, dt );
-            addFields(v, v0, dt );
+            addFields(u, u0, dt);
+            addFields(v, v0, dt);
 
-            swap(u0, u);
-            swap(v0, v);
+            var tmp;
+
+            // swap(u, u0);
+            tmp = u0;
+            u0 = u;
+            u = tmp;
+            // swap(v, v0);
+            tmp = v0;
+            v0 = v;
+            v = tmp;
 
             diffuse2(u,u0,v,v0, dt);
             project(u, v, u0, v0);
 
-            swap(u0, u);
-            swap(v0, v);
+            // swap(u, u0);
+            tmp = u0;
+            u0 = u;
+            u = tmp;
+            // swap(v, v0);
+            tmp = v0;
+            v0 = v;
+            v = tmp;
 
             advect(1, u, u0, u0, v0, dt);
             advect(2, v, v0, u0, v0, dt);
 
-            project(u, v, u0, v0 );
+            project(u, v, u0, v0);
+        }
+
+        function reset() {
+            rowSize = width + 2;
+            size = (width + 2) * (height + 2);
+
+            dens = new Array(size);
+            odens = new Array(size);
+
+            u = new Array(size);
+            ou = new Array(size);
+
+            v = new Array(size);
+            ov = new Array(size);
+
+            for (var i = 0; i < size; i++) {
+                odens[i] = ou[i] = ov[i] = dens[i] = u[i] = v[i] = 0;
+            }
         }
 
         function Field(dens, u, v) {
-            // Just exposing the fields here rather than using accessors is a measurable win during display (maybe 5%)
-            // but makes the code ugly.
+            // Just exposing the fields here rather than using accessors is a
+            // measurable win during display (maybe 5%) but makes the code ugly.
 
             this.setDensity = function(x, y, d) {
                 dens[(x + 1) + (y + 1) * rowSize] = d;
@@ -316,7 +364,9 @@ define([
             this.height = function() { return height; };
         }
 
-        var uiCallback = function(d,u,v) {};
+        this.setUICallback = function(callback) {
+            uiCallback = callback;
+        };
         function queryUI(d, u, v) {
             // console.log('queryUI');
             for (var i = 0; i < size; i++) {
@@ -340,51 +390,11 @@ define([
         };
 
         this.iterations = function() { return iterations; };
-
         this.setIterations = function(iters) {
             if (iters > 0 && iters <= 100) {
                 iterations = iters;
             }
         };
-
-        this.setUICallback = function(callback) {
-            uiCallback = callback;
-        };
-
-        var iterations = 10,
-            // visc = 0.5,
-            dt = 1,
-            dens,
-            odens,
-            u,
-            ou,
-            v,
-            ov,
-            width,
-            height,
-            rowSize,
-            size,
-            displayFunc;
-
-        function reset() {
-            rowSize = width + 2;
-            size = (width + 2) * (height + 2);
-
-            dens = new Array(size);
-            odens = new Array(size);
-
-            u = new Array(size);
-            ou = new Array(size);
-
-            v = new Array(size);
-            ov = new Array(size);
-
-            for (var i = 0; i < size; i++) {
-                odens[i] = ou[i] = ov[i] = dens[i] = u[i] = v[i] = 0;
-            }
-        }
-
-        this.reset = reset;
 
         this.setResolution = function (hRes, wRes) {
             var res = wRes * hRes;

@@ -26,7 +26,7 @@ require([
     if (window.$) { window.$.noConflict(true); }
     // if (window._) { window._.noConflict(); }
     var IS_TOUCH = window.Modernizr.touch;
-    var RESOLUTION = (IS_TOUCH) ? 8 : 4;
+    var RESOLUTION = (IS_TOUCH) ? 16 : 8;
 
     $(function() {
 
@@ -110,9 +110,9 @@ require([
             b = 128 + (Math.random() * 127 | 0);
 
         function update(f) {
-            if ( ! pointerDown &&
-                 ! (0 <= ox && ox < displayWidth) &&
-                 ! (0 <= oy && oy < displayHeight)) { return; }
+            if ( ! (pointerDown &&
+                 (0 <= ox && ox < displayWidth &&
+                  0 <= oy && oy < displayHeight))) { return; }
 
             dx = x - ox;
             dy = y - oy;
@@ -125,7 +125,7 @@ require([
                 py = (((oy + dy * (i / len)) / displayHeight) * canvasHeight) | 0;
 
                 f.setVelocity(px, py, dx, dy);
-                f.setDensity(px, py, 1);
+                f.setDensity(px, py, 25);
             }
 
             ox = x;
