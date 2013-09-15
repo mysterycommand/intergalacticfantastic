@@ -63,28 +63,30 @@ if (this.CanvasRenderingContext2D && !CanvasRenderingContext2D.createImageData) 
         var width = field.width();
         var height = field.height();
 
+        // console.log( !! bufferData, clampData);
         if (bufferData) {
             var data = bufferData.data;
-            var dlength = data.length;
-            var j = -3;
+            // var dlength = data.length;
+            // var j = -3;
             if (clampData) {
                 for (var x = 0; x < width; x++) {
                     for (var y = 0; y < height; y++) {
                         var d = field.getDensity(x, y) * 255 / 5;
                         d = d | 0;
-                        if (d > 255)
-                            d = 255;
+                        if (d > 255) { d = 255; }
                         data[4*(y * height + x) + 1] = d;
                     }
                 }
             } else {
                 for (var x = 0; x < width; x++) {
-                    for (var y = 0; y < height; y++)
+                    for (var y = 0; y < height; y++) {
                         data[4*(y * height + x) + 1] =  field.getDensity(x, y) * 255 / 5;
+                    }
                 }
             }
             context.putImageData(bufferData, 0, 0);
         } else {
+            console.log('THIS NEVER HAPPENS');
             for (var x = 0; x < width; x++) {
                 for (var y = 0; y < height; y++) {
                     var d = field.getDensity(x, y) / 5;

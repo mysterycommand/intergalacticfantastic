@@ -255,6 +255,7 @@ define([
         }
 
         function densityStep(x, x0, u, v, dt) {
+            // console.log('densityStep');
             addFields(x, x0, dt);
             diffuse(0, x0, x, dt );
             advect(0, x, x0, u, v, dt );
@@ -267,6 +268,7 @@ define([
         }
 
         function velocityStep(u, v, u0, v0, dt) {
+            // console.log('velocityStep');
             addFields(u, u0, dt );
             addFields(v, v0, dt );
 
@@ -284,8 +286,6 @@ define([
 
             project(u, v, u0, v0 );
         }
-
-        var uiCallback = function(d,u,v) {};
 
         function Field(dens, u, v) {
             // Just exposing the fields here rather than using accessors is a measurable win during display (maybe 5%)
@@ -316,7 +316,9 @@ define([
             this.height = function() { return height; };
         }
 
+        var uiCallback = function(d,u,v) {};
         function queryUI(d, u, v) {
+            // console.log('queryUI');
             for (var i = 0; i < size; i++) {
                 u[i] = v[i] = d[i] = 0.0;
             }
@@ -326,8 +328,10 @@ define([
 
         this.update = function () {
             queryUI(odens, ou, ov);
+
             velocityStep(u, v, ou, ov, dt);
             densityStep(dens, odens, u, v, dt);
+
             displayFunc(new Field(dens, u, v));
         };
 
@@ -348,8 +352,8 @@ define([
         };
 
         var iterations = 10,
-            visc = 0.5,
-            dt = 0.1,
+            // visc = 0.5,
+            dt = 1,
             dens,
             odens,
             u,
@@ -364,7 +368,7 @@ define([
 
         function reset() {
             rowSize = width + 2;
-            size = (width+2)*(height+2);
+            size = (width + 2) * (height + 2);
 
             dens = new Array(size);
             odens = new Array(size);
@@ -384,8 +388,8 @@ define([
 
         this.setResolution = function (hRes, wRes) {
             var res = wRes * hRes;
-            if (res > 0 && res < 1000000 &&
-               (wRes !== width || hRes !== height)) {
+            if ((res > 0 && res < 1000000) &&
+                (wRes !== width || hRes !== height)) {
                 width = wRes;
                 height = hRes;
                 reset();

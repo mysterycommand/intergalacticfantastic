@@ -18,8 +18,8 @@
                 document.getElementById("log").innerHTML = message;
             }
             var frames = 0;
-            var force = 5;
-            var source = 100;
+            // var force = 5;
+            // var source = 100;
             var sources = [];
             var omx, omy;
             var mx, my;
@@ -64,6 +64,7 @@
             }
             var start = new Date;
             var frames = 0;
+
             function updateFrame() {
                 field.update();
                 var end = new Date;
@@ -76,7 +77,9 @@
                 if (running)
                     interval = setTimeout(updateFrame, 10);
             }
+
             var options = {};
+
             try {
                 options = JSON.parse(location.search.substring(1));
             } catch(e) {
