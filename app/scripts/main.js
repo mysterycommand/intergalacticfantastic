@@ -33,7 +33,7 @@ require([
     }
 
     var IS_TOUCH = window.Modernizr.touch;
-    var RESOLUTION = (IS_TOUCH) ? 8 : 8;
+    var RESOLUTION = (IS_TOUCH) ? 32 : 16;
 
     $(function() {
 
@@ -111,10 +111,7 @@ require([
             dx, dy, len, px, py, i,
             bufferData, data, j,
             cx, cy, cd,
-
-            r = 128 + (Math.random() * 127 | 0),
-            g = 128 + (Math.random() * 127 | 0),
-            b = 128 + (Math.random() * 127 | 0);
+            r, g, b, a;
 
         function update(f) {
             if ( ! (pointerDown &&
@@ -143,17 +140,24 @@ require([
             bufferData = bufferCtx.createImageData(canvasWidth, canvasHeight);
             data = bufferData.data;
 
-            for (j = 3; j < data.length; j += 4) {
-                // set the alpha channel to 100% alpha
-                data[j] = 255;
-            }
+            // for (j = 3; j < data.length; j += 4) {
+            //     // set the alpha channel to 100% alpha
+            //     data[j] = 255;
+            // }
 
             for (cx = 0; cx < canvasWidth; ++cx) {
                 for (cy = 0; cy < canvasHeight; ++cy) {
-                    cd = f.getDensity(cx, cy);
-                    data[4 * (cy * canvasWidth + cx) + 1] = cd * 127;
-                    // data[4 * (cy * canvasWidth + cx) + 1] = cel * g;
-                    // data[4 * (cy * canvasWidth + cx) + 2] = cel * b;
+                    cd = f.getDensity(cx, cy) * 765;
+
+                    r = Math.min(Math.max(0, cd), 255);
+                    g = Math.min(Math.max(0, cd - 255), 255);
+                    b = Math.min(Math.max(0, cd - 510), 255);
+                    a = 255 * cd;
+
+                    data[4 * (cy * canvasWidth + cx) + 0] = r;
+                    data[4 * (cy * canvasWidth + cx) + 1] = g;
+                    data[4 * (cy * canvasWidth + cx) + 2] = b;
+                    data[4 * (cy * canvasWidth + cx) + 3] = a;
                 }
             }
 

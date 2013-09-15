@@ -66,20 +66,21 @@ canvas {
     /* http://29a.ch/2011/5/27/fast-html5-canvas-on-iphone-mobile-safari-performance */
     @extend %translate-3d;
 
-    /* http://nullsleep.tumblr.com/post/16417178705/how-to-disable-image-smoothing-in-modern-web-browsers */
+    background: #000;
+
+    /**
+     * http://nullsleep.tumblr.com/post/16417178705/how-to-disable-image-smoothing-in-modern-web-browsers
+     *
+     * DOESN'T WORK IN CHROME?
+     * @see http://jsfiddle.net/VAXrL/21/
+     * @see http://jsfiddle.net/worldhack/C4Q45/ <-- possible work around?
+     */
     image-rendering: optimizeSpeed;
     image-rendering: -moz-crisp-edges;
     image-rendering: -o-crisp-edges;
     image-rendering: -webkit-optimize-contrast;
     image-rendering: optimize-contrast;
     -ms-interpolation-mode: nearest-neighbor;
-    /**
-     * DOESN'T WORK IN CHROME?
-     * @see http://jsfiddle.net/VAXrL/21/
-     * @see http://jsfiddle.net/worldhack/C4Q45/ <-- possible work around?
-     */
-
-    opacity: 0.999;
 }
 
 
