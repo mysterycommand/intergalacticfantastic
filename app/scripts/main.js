@@ -10,14 +10,12 @@
 require([
 
     'jquery',
-    // 'dynamics/Field',
     'dynamics/Fluid',
     'polyfill/window.requestAnimationFrame'
 
 ], function (
 
     $,
-    // Field,
     Fluid
 
 ) {
