@@ -24,7 +24,7 @@ require([
     if (window.$) { window.$.noConflict(true); }
     // if (window._) { window._.noConflict(); }
     var IS_TOUCH = window.Modernizr.touch;
-    var RESOLUTION = (IS_TOUCH) ? 16 : 8;
+    var RESOLUTION = (IS_TOUCH) ? 8 : 8;
 
     $(function() {
 
@@ -41,8 +41,8 @@ require([
             buffer = document.createElement('canvas'),
             bufferCtx = buffer.getContext('2d'),
 
-            canvasWidth = canvas.width = main.offsetWidth / RESOLUTION | 0,
-            canvasHeight = canvas.height = main.offsetHeight / RESOLUTION | 0,
+            canvasWidth = canvas.width = 64, // main.offsetWidth / RESOLUTION | 0,
+            canvasHeight = canvas.height = 48, // main.offsetHeight / RESOLUTION | 0,
 
             displayWidth = canvasWidth * RESOLUTION,
             displayHeight = canvasHeight * RESOLUTION;
@@ -101,7 +101,7 @@ require([
         var fluid = new Fluid(canvas),
             dx, dy, len, px, py, i,
             bufferData, data, j,
-            row, col, cel,
+            cx, cy, cd,
 
             r = 128 + (Math.random() * 127 | 0),
             g = 128 + (Math.random() * 127 | 0),
@@ -120,7 +120,7 @@ require([
 
             for (i = 0; i < len; ++i) {
                 px = (((ox + dx * (i / len)) / displayWidth) * canvasWidth) | 0;
-                py = (((oy + dy * (i / len)) / displayHeight) * canvasHeight) | 0;
+                py = (((oy - dy * (i / len)) / displayHeight) * canvasHeight) | 0;
 
                 f.setVelocity(px, py, dx, dy);
                 f.setDensity(px, py, 25);
@@ -139,12 +139,12 @@ require([
                 data[j] = 255;
             }
 
-            for (col = 0; col < canvasWidth; ++col) {
-                for (row = 0; row < canvasHeight; ++row) {
-                    cel = f.getDensity(col, row);
-                    data[4 * (row * canvasWidth + col) + 0] = cel * r;
-                    data[4 * (row * canvasWidth + col) + 1] = cel * g;
-                    data[4 * (row * canvasWidth + col) + 2] = cel * b;
+            for (cx = 0; cx < canvasWidth; ++cx) {
+                for (cy = 0; cy < canvasHeight; ++cy) {
+                    cd = f.getDensity(cx, cy);
+                    data[4 * (cy * canvasWidth + cx) + 0] = cd * 127;
+                    // data[4 * (cy * canvasWidth + cx) + 1] = cel * g;
+                    // data[4 * (cy * canvasWidth + cx) + 2] = cel * b;
                 }
             }
 
@@ -192,6 +192,9 @@ require([
             });
         }
         animate();
+
+
+
     });
 
 });

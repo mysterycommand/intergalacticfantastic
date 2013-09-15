@@ -1,7 +1,7 @@
 // Based on http://www.dgp.toronto.edu/people/stam/reality/Research/pdf/GDC03.pdf
 /**
  * Copyright (c) 2009 Oliver Hunt <http://nerget.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without
@@ -10,10 +10,10 @@
  * copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following
  * conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -38,7 +38,7 @@ function FluidField(canvas) {
                 x[i + (height+1) *rowSize] = x[i + height * rowSize];
             }
 
-            for (var j = 1; i <= height; i++) {
+            for (var j = 1; j <= height; j++) {
                 x[j * rowSize] = -x[1 + j * rowSize];
                 x[(width + 1) + j * rowSize] = -x[width + j * rowSize];
             }
@@ -98,13 +98,13 @@ function FluidField(canvas) {
             }
         }
     }
-    
+
     function diffuse(b, x, x0, dt)
     {
         var a = 0;
         lin_solve(b, x, x0, a, 1 + 4*a);
     }
-    
+
     function lin_solve2(x, x0, y, y0, a, c)
     {
         if (a === 0 && c === 1) {
@@ -139,13 +139,13 @@ function FluidField(canvas) {
             }
         }
     }
-    
+
     function diffuse2(x, x0, y, y0, dt)
     {
         var a = 0;
         lin_solve2(x, x0, y, y0, a, 1 + 4 * a);
     }
-    
+
     function advect(b, d, d0, u, v, dt)
     {
         var Wdt0 = dt * width;
@@ -155,7 +155,7 @@ function FluidField(canvas) {
         for (var j = 1; j<= height; j++) {
             var pos = j * rowSize;
             for (var i = 1; i <= width; i++) {
-                var x = i - Wdt0 * u[++pos]; 
+                var x = i - Wdt0 * u[++pos];
                 var y = j - Hdt0 * v[pos];
                 if (x < 0.5)
                     x = 0.5;
@@ -180,7 +180,7 @@ function FluidField(canvas) {
         }
         set_bnd(b, d);
     }
-    
+
     function project(u, v, p, div)
     {
         var h = -0.5 / Math.sqrt(width * height);
@@ -198,7 +198,7 @@ function FluidField(canvas) {
         }
         set_bnd(0, div);
         set_bnd(0, p);
-        
+
         lin_solve(0, p, div, 1, 4 );
         var wScale = 0.5 * width;
         var hScale = 0.5 * height;
@@ -218,14 +218,14 @@ function FluidField(canvas) {
         set_bnd(1, u);
         set_bnd(2, v);
     }
-    
+
     function dens_step(x, x0, u, v, dt)
     {
         addFields(x, x0, dt);
         diffuse(0, x0, x, dt );
         advect(0, x, x0, u, v, dt );
     }
-    
+
     function vel_step(u, v, u0, v0, dt)
     {
         addFields(u, u0, dt );
@@ -234,7 +234,7 @@ function FluidField(canvas) {
         var temp = v0; v0 = v; v = temp;
         diffuse2(u,u0,v,v0, dt);
         project(u, v, u0, v0);
-        var temp = u0; u0 = u; u = temp; 
+        var temp = u0; u0 = u; u = temp;
         var temp = v0; v0 = v; v = temp;
         advect(1, u, u0, u0, v0, dt);
         advect(2, v, v0, u0, v0, dt);
@@ -280,7 +280,7 @@ function FluidField(canvas) {
     this.setDisplayFunction = function(func) {
         displayFunc = func;
     }
-    
+
     this.iterations = function() { return iterations; }
     this.setIterations = function(iters) {
         if (iters > 0 && iters <= 100)
