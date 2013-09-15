@@ -164,8 +164,8 @@ require([
             canvasCtx.putImageData(bufferData, 0, 0);
         }
 
-        fluid.setUICallback(update);
-        fluid.setDisplayFunction(render);
+        fluid.setUpdateCallback(update);
+        fluid.setRenderCallback(render);
         fluid.setResolution(canvasWidth, canvasHeight);
 
 
@@ -178,7 +178,7 @@ require([
             then, now, d;
 
         function loop(time) {
-            fluid.update();
+            fluid.step();
 
             then || (then = time);
             now = time;

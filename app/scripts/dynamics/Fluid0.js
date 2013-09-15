@@ -28,7 +28,7 @@ define([
         var uiCallback = function(d,u,v) {},
             iterations = 10,
             // visc = 0.5,
-            dt = 0.2,
+            dt = 0.1,
             dens,
             odens,
             u,
@@ -48,12 +48,13 @@ define([
         }
 
         function setBound(b, x) {
-            var i, j;
+            var i, j,
+                maxEdge = (height + 1) * rowSize;
 
             if (b === 1) {
                 for (i = 1; i <= width; ++i) {
                     x[i] =  x[i + rowSize];
-                    x[i + (height+1) *rowSize] = x[i + height * rowSize];
+                    x[i + maxEdge] = x[i + height * rowSize];
                 }
 
                 for (j = 1; j <= height; ++j) {
@@ -63,7 +64,7 @@ define([
             } else if (b === 2) {
                 for (i = 1; i <= width; ++i) {
                     x[i] = -x[i + rowSize];
-                    x[i + (height + 1) * rowSize] = -x[i + height * rowSize];
+                    x[i + maxEdge] = -x[i + height * rowSize];
                 }
 
                 for (j = 1; j <= height; ++j) {
@@ -72,17 +73,15 @@ define([
                 }
             } else {
                 for (i = 1; i <= width; ++i) {
-                    x[i] =  x[i + rowSize];
-                    x[i + (height + 1) * rowSize] = x[i + height * rowSize];
+                    x[i] = x[i + rowSize];
+                    x[i + maxEdge] = x[i + height * rowSize];
                 }
 
                 for (j = 1; j <= height; ++j) {
                     x[j * rowSize] =  x[1 + j * rowSize];
-                    x[(width + 1) + j * rowSize] =  x[width + j * rowSize];
+                    x[(width + 1) + j * rowSize] = x[width + j * rowSize];
                 }
             }
-
-            var maxEdge = (height + 1) * rowSize;
 
             x[0]                 = 0.5 * (x[1] + x[rowSize]);
             x[maxEdge]           = 0.5 * (x[1 + maxEdge] + x[height * rowSize]);
@@ -334,26 +333,29 @@ define([
         function Field(dens, u, v) {
             // Just exposing the fields here rather than using accessors is a
             // measurable win during display (maybe 5%) but makes the code ugly.
+            // function key(x, y) { return (x + 1) + (y + 1) * rowSize; } // The original way.
+            function key(x, y) { return (x + 1) * rowSize + (y + 1); } // The way that works.
 
             this.setDensity = function(x, y, d) {
-                dens[(x + 1) + (y + 1) * rowSize] = d;
+                dens[key(x, y)] = d;
             };
 
             this.getDensity = function(x, y) {
-                return dens[(x + 1) + (y + 1) * rowSize];
+                return dens[key(x, y)];
             };
 
-            this.setVelocity = function(x, y, xv, yv) {
-                u[(x + 1) + (y + 1) * rowSize] = xv;
-                v[(x + 1) + (y + 1) * rowSize] = yv;
+            // this.setVelocity = function(x, y, xv, yv) { // The original way.
+            this.setVelocity = function(x, y, yv, xv) { // The way that works.
+                u[key(x, y)] = xv;
+                v[key(x, y)] = yv;
             };
 
             this.getXVelocity = function(x, y) {
-                return u[(x + 1) + (y + 1) * rowSize];
+                return u[key(x, y)];
             };
 
             this.getYVelocity = function(x, y) {
-                return v[(x + 1) + (y + 1) * rowSize];
+                return v[key(x, y)];
             };
 
             this.width = function() { return width; };
