@@ -21,8 +21,17 @@ require([
 ) {
 
     'use strict';
-    if (window.$) { window.$.noConflict(true); }
-    // if (window._) { window._.noConflict(); }
+    if (window.$) {
+        window.$.noConflict(true);
+        delete window.jQuery;
+        delete window.$;
+    }
+
+    if (window._) {
+        window._.noConflict();
+        delete window._;
+    }
+
     var IS_TOUCH = window.Modernizr.touch;
     var RESOLUTION = (IS_TOUCH) ? 8 : 8;
 
@@ -41,8 +50,8 @@ require([
             buffer = document.createElement('canvas'),
             bufferCtx = buffer.getContext('2d'),
 
-            canvasWidth = canvas.width = 64, // main.offsetWidth / RESOLUTION | 0,
-            canvasHeight = canvas.height = 48, // main.offsetHeight / RESOLUTION | 0,
+            canvasWidth = canvas.width = main.offsetWidth / RESOLUTION | 0, // 64, //
+            canvasHeight = canvas.height = main.offsetHeight / RESOLUTION | 0, // 48, //
 
             displayWidth = canvasWidth * RESOLUTION,
             displayHeight = canvasHeight * RESOLUTION;
@@ -142,7 +151,7 @@ require([
             for (cx = 0; cx < canvasWidth; ++cx) {
                 for (cy = 0; cy < canvasHeight; ++cy) {
                     cd = f.getDensity(cx, cy);
-                    data[4 * (cy * canvasWidth + cx) + 0] = cd * 127;
+                    data[4 * (cy * canvasWidth + cx) + 1] = cd * 127;
                     // data[4 * (cy * canvasWidth + cx) + 1] = cel * g;
                     // data[4 * (cy * canvasWidth + cx) + 2] = cel * b;
                 }
@@ -189,8 +198,11 @@ require([
             window.addEventListener('keyup', function(event) {
                 if (event.which !== 32) { return; }
                 isRunning ? stop() : animate();
+                // if (isRunning) { stop(); }
+                // else { fluid.update(); }
             });
         }
+
         animate();
 
 

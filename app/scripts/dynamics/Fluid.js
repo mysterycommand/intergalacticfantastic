@@ -28,7 +28,7 @@ define([
         var uiCallback = function(d,u,v) {},
             iterations = 10,
             // visc = 0.5,
-            dt = 0.2,
+            dt = 0.1,
             dens,
             odens,
             u,
@@ -333,7 +333,8 @@ define([
         function Field(dens, u, v) {
             // Just exposing the fields here rather than using accessors is a
             // measurable win during display (maybe 5%) but makes the code ugly.
-            function key(x, y) { return (x + 1) * rowSize + (y + 1); }
+            // function key(x, y) { return (x + 1) + (y + 1) * rowSize; } // The original way.
+            function key(x, y) { return (x + 1) * rowSize + (y + 1); } // The way that works.
 
             this.setDensity = function(x, y, d) {
                 dens[key(x, y)] = d;
@@ -343,7 +344,8 @@ define([
                 return dens[key(x, y)];
             };
 
-            this.setVelocity = function(x, y, xv, yv) {
+            // this.setVelocity = function(x, y, xv, yv) { // The original way.
+            this.setVelocity = function(x, y, yv, xv) { // The way that works.
                 u[key(x, y)] = xv;
                 v[key(x, y)] = yv;
             };
