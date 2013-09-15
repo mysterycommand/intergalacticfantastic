@@ -142,7 +142,6 @@ require([
             }
 
             for (col = 0; col < canvasWidth; ++col) {
-
                 for (row = 0; row < canvasHeight; ++row) {
                     cel = f.getDensity(col, row);
                     data[4 * (row * canvasWidth + col) + 0] = cel * r;

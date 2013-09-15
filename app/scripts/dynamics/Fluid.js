@@ -277,12 +277,6 @@ define([
             advect(0, x, x0, u, v, dt );
         }
 
-        function swap(a, a0) {
-            var tmp = a0;
-            a0 = a;
-            a = tmp;
-        }
-
         function velocityStep(u, v, u0, v0, dt) {
             // console.log('velocityStep');
             addFields(u, u0, dt);
