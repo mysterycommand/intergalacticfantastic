@@ -122,47 +122,47 @@ define([
             }
         }
 
-        function _setBound(b, x) {
-            var i, j,
-                maxEdge = (_height + 1) * _rowSize;
+        // function _setBound(b, x) {
+        //     var i, j,
+        //         maxEdge = (_height + 1) * _rowSize;
 
-            if (b === 1) {
-                for (i = 1; i <= _width; ++i) {
-                    x[i] =  x[i + _rowSize];
-                    x[i + maxEdge] = x[i + _height * _rowSize];
-                }
+        //     if (b === 1) {
+        //         for (i = 1; i <= _width; ++i) {
+        //             x[i] =  x[i + _rowSize];
+        //             x[i + maxEdge] = x[i + _height * _rowSize];
+        //         }
 
-                for (j = 1; j <= _height; ++j) {
-                    x[j * _rowSize] = -x[1 + j * _rowSize];
-                    x[(_width + 1) + j * _rowSize] = -x[_width + j * _rowSize];
-                }
-            } else if (b === 2) {
-                for (i = 1; i <= _width; ++i) {
-                    x[i] = -x[i + _rowSize];
-                    x[i + maxEdge] = -x[i + _height * _rowSize];
-                }
+        //         for (j = 1; j <= _height; ++j) {
+        //             x[j * _rowSize] = -x[1 + j * _rowSize];
+        //             x[(_width + 1) + j * _rowSize] = -x[_width + j * _rowSize];
+        //         }
+        //     } else if (b === 2) {
+        //         for (i = 1; i <= _width; ++i) {
+        //             x[i] = -x[i + _rowSize];
+        //             x[i + maxEdge] = -x[i + _height * _rowSize];
+        //         }
 
-                for (j = 1; j <= _height; ++j) {
-                    x[j * _rowSize] =  x[1 + j * _rowSize];
-                    x[(_width + 1) + j * _rowSize] =  x[_width + j * _rowSize];
-                }
-            } else {
-                for (i = 1; i <= _width; ++i) {
-                    x[i] = x[i + _rowSize];
-                    x[i + maxEdge] = x[i + _height * _rowSize];
-                }
+        //         for (j = 1; j <= _height; ++j) {
+        //             x[j * _rowSize] =  x[1 + j * _rowSize];
+        //             x[(_width + 1) + j * _rowSize] =  x[_width + j * _rowSize];
+        //         }
+        //     } else {
+        //         for (i = 1; i <= _width; ++i) {
+        //             x[i] = x[i + _rowSize];
+        //             x[i + maxEdge] = x[i + _height * _rowSize];
+        //         }
 
-                for (j = 1; j <= _height; ++j) {
-                    x[j * _rowSize] =  x[1 + j * _rowSize];
-                    x[(_width + 1) + j * _rowSize] = x[_width + j * _rowSize];
-                }
-            }
+        //         for (j = 1; j <= _height; ++j) {
+        //             x[j * _rowSize] =  x[1 + j * _rowSize];
+        //             x[(_width + 1) + j * _rowSize] = x[_width + j * _rowSize];
+        //         }
+        //     }
 
-            x[0]                 = 0.5 * (x[1] + x[_rowSize]);
-            x[maxEdge]           = 0.5 * (x[1 + maxEdge] + x[_height * _rowSize]);
-            x[(_width+1)]         = 0.5 * (x[_width] + x[(_width + 1) + _rowSize]);
-            x[(_width+1)+maxEdge] = 0.5 * (x[_width + maxEdge] + x[(_width + 1) + _height * _rowSize]);
-        }
+        //     x[0]                 = 0.5 * (x[1] + x[_rowSize]);
+        //     x[maxEdge]           = 0.5 * (x[1 + maxEdge] + x[_height * _rowSize]);
+        //     x[(_width+1)]         = 0.5 * (x[_width] + x[(_width + 1) + _rowSize]);
+        //     x[(_width+1)+maxEdge] = 0.5 * (x[_width + maxEdge] + x[(_width + 1) + _height * _rowSize]);
+        // }
 
         function _linearSolve(b, x, x0, a, c) {
             var i, j, k,
@@ -178,7 +178,7 @@ define([
                         ++currentRow;
                     }
                 }
-                _setBound(b, x);
+                // _setBound(b, x);
             } else {
                 invC = 1 / c;
                 for (k = 0; k < _iterations; ++k) {
@@ -192,7 +192,7 @@ define([
                             lastX = x[currentRow] = (x0[currentRow] + a * (lastX + x[++currentRow] + x[++lastRow] + x[++nextRow])) * invC;
                         }
                     }
-                    _setBound(b, x);
+                    // _setBound(b, x);
                 }
             }
         }
@@ -217,8 +217,8 @@ define([
                         ++currentRow;
                     }
                 }
-                _setBound(1, x);
-                _setBound(2, y);
+                // _setBound(1, x);
+                // _setBound(2, y);
             } else {
                 invC = 1 / c;
                 for (k = 0; k < _iterations; ++k) {
@@ -234,8 +234,8 @@ define([
                             lastY = y[currentRow] = (y0[currentRow] + a * (lastY + y[++currentRow] + y[++lastRow] + y[++nextRow])) * invC;
                         }
                     }
-                    _setBound(1, x);
-                    _setBound(2, y);
+                    // _setBound(1, x);
+                    // _setBound(2, y);
                 }
             }
         }
@@ -290,7 +290,7 @@ define([
                     d[pos] = s0 * (t0 * d0[i0 + row1] + t1 * d0[i0 + row2]) + s1 * (t0 * d0[i1 + row1] + t1 * d0[i1 + row2]);
                 }
             }
-            _setBound(b, d);
+            // _setBound(b, d);
         }
 
         function _project(u, v, p, div) {
@@ -316,8 +316,8 @@ define([
                 }
             }
 
-            _setBound(0, div);
-            _setBound(0, p);
+            // _setBound(0, div);
+            // _setBound(0, p);
 
             _linearSolve(0, p, div, 1, 4 );
 
@@ -340,8 +340,8 @@ define([
                 }
             }
 
-            _setBound(1, u);
-            _setBound(2, v);
+            // _setBound(1, u);
+            // _setBound(2, v);
         }
 
 
