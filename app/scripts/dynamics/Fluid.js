@@ -49,15 +49,12 @@ define([
 
         this.setResolution = function (w, h) {
             var res = w * h;
-            if ((0 < res && res < 1000000) &&
-                (_width !== w || _height !== h)) {
-                _width = w;
-                _height = h;
-                _reset();
-                return true;
-            }
+            if ( ! (res && (0 < res && res < 1000000)) ||
+                _width === w || _height === h) { return; }
 
-            return false;
+            _width = w;
+            _height = h;
+            _reset();
         };
 
         this.step = function () {

@@ -136,6 +136,53 @@ require([
             oy = y;
         }
 
+        var colorMethods = [
+            function redYellowWhite(d) {
+                r = Math.min(Math.max(0, d), 255);
+                g = Math.min(Math.max(0, d - 255), 255);
+                b = Math.min(Math.max(0, d - 510), 255);
+                a = 255 * d;
+            },
+
+            function redMagentaWhite(d) {
+                r = Math.min(Math.max(0, d), 255);
+                b = Math.min(Math.max(0, d - 255), 255);
+                g = Math.min(Math.max(0, d - 510), 255);
+                a = 255 * d;
+            },
+
+            function blueCyanWhite(d) {
+                b = Math.min(Math.max(0, d), 255);
+                g = Math.min(Math.max(0, d - 255), 255);
+                r = Math.min(Math.max(0, d - 510), 255);
+                a = 255 * d;
+            },
+
+            function blueMagentaWhite(d) {
+                b = Math.min(Math.max(0, d), 255);
+                r = Math.min(Math.max(0, d - 255), 255);
+                g = Math.min(Math.max(0, d - 510), 255);
+                a = 255 * d;
+            },
+
+            function greenYellowWhite(d) {
+                g = Math.min(Math.max(0, d), 255);
+                r = Math.min(Math.max(0, d - 255), 255);
+                b = Math.min(Math.max(0, d - 510), 255);
+                a = 255 * d;
+            },
+
+            function greenCyanWhite(d) {
+                g = Math.min(Math.max(0, d), 255);
+                b = Math.min(Math.max(0, d - 255), 255);
+                r = Math.min(Math.max(0, d - 510), 255);
+                a = 255 * d;
+            }
+        ];
+
+        var colorMethodIndex = 0;
+        var colorMethod = colorMethods[colorMethodIndex];
+
         function render(f) {
             bufferData = bufferCtx.createImageData(canvasWidth, canvasHeight);
             data = bufferData.data;
@@ -147,12 +194,7 @@ require([
 
             for (cx = 0; cx < canvasWidth; ++cx) {
                 for (cy = 0; cy < canvasHeight; ++cy) {
-                    cd = f.getDensity(cx, cy) * 765;
-
-                    r = Math.min(Math.max(0, cd), 255);
-                    g = Math.min(Math.max(0, cd - 255), 255);
-                    b = Math.min(Math.max(0, cd - 510), 255);
-                    a = 255 * cd;
+                    colorMethod(f.getDensity(cx, cy) * 765);
 
                     data[4 * (cy * canvasWidth + cx) + 0] = r;
                     data[4 * (cy * canvasWidth + cx) + 1] = g;
@@ -200,10 +242,17 @@ require([
 
         if ( ! IS_TOUCH) {
             window.addEventListener('keyup', function(event) {
-                if (event.which !== 32) { return; }
-                isRunning ? stop() : animate();
-                // if (isRunning) { stop(); }
-                // else { fluid.update(); }
+                switch (event.which) {
+                case 32:
+                    isRunning ? stop() : animate();
+                    // if (isRunning) { stop(); }
+                    // else { fluid.update(); }
+                    break;
+
+                case 67:
+                    colorMethod = colorMethods[++colorMethodIndex % colorMethods.length];
+                    break;
+                }
             });
         }
 
