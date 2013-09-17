@@ -1,5 +1,6 @@
 @import "../bower_components/normalize-css/normalize.css";
 
+$blck: #000;
 $dark: #222;
 $copy: #444;
 $grey: #666;
@@ -14,17 +15,6 @@ $fore: #fafafa;
 %reset {
     margin: 0;
     padding: 0;
-}
-
-%ui-helper-hidden-accessible {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
 }
 
 %translate-3d {
@@ -54,12 +44,21 @@ body {
 main {
     @extend %translate-3d;
 
-    background: $fore;
-    height: 100%; //
-    margin: auto;
-//    max-width: 960px; //
+    background: $blck;
+    height: 100%;
     overflow: hidden;
+    position: relative;
     width: 100%;
+}
+
+h1 {
+    display: inline-block;
+    font-weight: normal;
+    height: 50px;
+    line-height: 50px;
+    margin: -25px 0 0 -100px;
+    text-align: center;
+    width: 200px;
 }
 
 canvas {
@@ -81,6 +80,28 @@ canvas {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: optimize-contrast;
     -ms-interpolation-mode: nearest-neighbor;
+}
+
+.inner {
+    position: relative;
+        top: 50%;
+        left: 50%;
+}
+
+.hidden-accessible {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.hidden-completely {
+    display: none;
+    visibility: hidden;
 }
 
 

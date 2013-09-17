@@ -43,6 +43,7 @@ require([
          * Main setup stuff.
          */
         var main = document.getElementById('js-main'),
+            loader = document.getElementById('js-loader'),
 
             canvas = document.getElementById('js-canvas'),
             canvasCtx = canvas.getContext('2d'),
@@ -50,14 +51,27 @@ require([
             buffer = document.createElement('canvas'),
             bufferCtx = buffer.getContext('2d'),
 
-            canvasWidth = canvas.width = main.offsetWidth / RESOLUTION | 0, // 64, //
-            canvasHeight = canvas.height = main.offsetHeight / RESOLUTION | 0, // 48, //
+            canvasWidth = canvas.width = 1 + main.offsetWidth / RESOLUTION | 0, // 64, //
+            canvasHeight = canvas.height = 1 + main.offsetHeight / RESOLUTION | 0, // 48, //
 
             displayWidth = canvasWidth * RESOLUTION,
             displayHeight = canvasHeight * RESOLUTION;
 
         canvas.style.width = displayWidth + 'px';
         canvas.style.height = displayHeight + 'px';
+        canvas.style.marginTop = (-displayHeight / 2) + 'px';
+        canvas.style.marginLeft = (-displayWidth / 2) + 'px';
+
+        function removeClass(element, className) {
+            element.className = element.className.split(/\s/).filter(function(value) { return value !== className; });
+        }
+
+        function addClass(element, className) {
+            element.className = element.className.split(/\s/).concat(className).join(' ');
+        }
+
+        removeClass(canvas, 'hidden-completely');
+        addClass(loader, 'hidden-completely');
 
 
 
