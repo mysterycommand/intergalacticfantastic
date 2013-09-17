@@ -57,11 +57,17 @@ require([
             displayWidth = canvasWidth * RESOLUTION,
             displayHeight = canvasHeight * RESOLUTION;
 
+
+
+        // Style the canvas element to center it under the viewport.
         canvas.style.width = displayWidth + 'px';
         canvas.style.height = displayHeight + 'px';
         canvas.style.marginTop = (-displayHeight / 2) + 'px';
         canvas.style.marginLeft = (-displayWidth / 2) + 'px';
 
+
+
+        // Hide the "Loading..." sign, show the canvas.
         function removeClass(element, className) {
             element.className = element.className.split(/\s/).filter(function(value) { return value !== className; });
         }

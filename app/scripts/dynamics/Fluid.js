@@ -14,11 +14,7 @@
 
 define([
 
-    // 'dynamics/Field'
-
 ], function (
-
-    // Field
 
 ) {
 
@@ -321,8 +317,8 @@ define([
 
             _linearSolve(0, p, div, 1, 4 );
 
-            var wScale = 0.5 * _width;
-            var hScale = 0.5 * _height;
+            var halfWidth = 0.5 * _width,
+                halfHeight = 0.5 * _height;
 
             for (j = 1; j<= _height; ++j) {
 
@@ -335,8 +331,8 @@ define([
                 nextRow = (j + 1) * _rowSize;
 
                 for (i = 1; i<= _width; ++i) {
-                    u[++currentPos] -= wScale * (p[++nextPos] - p[++prevPos]);
-                    v[currentPos]   -= hScale * (p[++nextRow] - p[++prevRow]);
+                    u[++currentPos] -= halfWidth * (p[++nextPos] - p[++prevPos]);
+                    v[currentPos]   -= halfHeight * (p[++nextRow] - p[++prevRow]);
                 }
             }
 

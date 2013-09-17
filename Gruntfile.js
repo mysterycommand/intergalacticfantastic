@@ -352,7 +352,31 @@ module.exports = function (grunt) {
                 exclude: ['modernizr']
             },
             all: {
-                rjsConfig: '<%= yeoman.app %>/scripts/main.js'
+                rjsConfig: '<%= yeoman.app %>/scripts/config.js'
+            }
+        },
+        manifest: {
+            generate: {
+                options: {
+                    basePath: '<%= yeoman.dist %>',
+                    // cache: ['js/app.js', 'css/style.css'],
+                    // network: ['http://*', 'https://*'],
+                    // fallback: ['/ /offline.html'],
+                    // exclude: ['js/jquery.min.js'],
+                    // preferOnline: true,
+                    verbose: true,
+                    timestamp: true,
+                    hash: true,
+                    master: ['index.html']
+                },
+                src: [
+                    '*.html',
+                    '*.ico',
+                    '*.txt',
+                    '**/*.js',
+                    '**/*.css'
+                ],
+                dest: '<%= yeoman.dist %>/manifest.appcache'
             }
         }
     });
@@ -392,7 +416,8 @@ module.exports = function (grunt) {
         'copy:dist',
         'rev',
         'usemin',
-        'usereplace'
+        'usereplace',
+        'manifest'
     ]);
 
     grunt.registerTask('default', [
