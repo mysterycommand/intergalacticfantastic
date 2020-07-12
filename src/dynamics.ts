@@ -24,6 +24,9 @@ export class Dynamics {
   private aVelocitiesY: number[] = new Array(this.size).fill(0);
   private bVelocitiesY: number[] = Array.from(this.aVelocitiesY);
 
+  private iterations: number = 10;
+  private ii: number = 1 / this.iterations;
+
   constructor(readonly w: number, readonly h: number) {
     this.cols = w + 2;
     this.rows = h + 2;
@@ -32,6 +35,20 @@ export class Dynamics {
 
   public step(input: Input, data: Uint8ClampedArray) {
     this.queryUi(input);
+
+    this.velocities(
+      this.aVelocitiesX,
+      this.aVelocitiesY,
+      this.bVelocitiesX,
+      this.bVelocitiesY
+    );
+    this.densities(
+      this.aDensities,
+      this.bDensities,
+      this.aVelocitiesX,
+      this.aVelocitiesY
+    );
+
     this.render(data);
   }
 
@@ -54,6 +71,31 @@ export class Dynamics {
       this.bVelocitiesY[cell] = input.dy;
       this.bDensities[cell] = 255;
     }
+  }
+
+  private addTo(as: number[], bs: number[]) {
+    for (let i = 0; i < this.size; ++i) {
+      as[i] += bs[i] * this.ii;
+    }
+  }
+
+  private velocities(
+    axs: number[],
+    ays: number[],
+    bxs: number[],
+    bys: number[]
+  ) {
+    this.addTo(axs, bxs);
+    this.addTo(ays, bys);
+  }
+
+  private densities(
+    ads: number[],
+    bds: number[],
+    axs: number[],
+    ays: number[]
+  ) {
+    this.addTo(ads, bds);
   }
 
   private render(data: Uint8ClampedArray) {
