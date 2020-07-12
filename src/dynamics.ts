@@ -1,4 +1,4 @@
-const { abs, min } = Math;
+const { abs, min, sqrt } = Math;
 
 export interface Input {
   x: number;
@@ -26,6 +26,9 @@ export class Dynamics {
 
   private iterations: number = 10;
   private ii: number = 1 / this.iterations;
+  private q: number = -0.5 / sqrt(this.w * this.h);
+  private hw: number = this.w / 2;
+  private hh: number = this.h / 2;
 
   constructor(readonly w: number, readonly h: number) {
     this.cols = w + 2;
@@ -80,11 +83,76 @@ export class Dynamics {
   }
 
   private diffuse(as: number[], bs: number[]) {
-    // hi
+    for (let j = 1; j <= this.h; ++j) {
+      let index = j * this.cols;
+      ++index;
+
+      for (let i = 0; i < this.w; ++i) {
+        as[index] = bs[index];
+        ++index;
+      }
+    }
+  }
+
+  private solve(xs: number[], ys: number[]) {
+    for (let k = 0; k < this.iterations; ++k) {
+      for (let j = 1; j <= this.h; ++j) {
+        let prevRowIndex = (j - 1) * this.cols;
+        let currRowIndex = j * this.cols;
+        let nextRowIndex = (j + 1) * this.cols;
+
+        let x = xs[currRowIndex];
+        ++currRowIndex;
+
+        for (let i = 1; i <= this.w; ++i) {
+          x = xs[currRowIndex] =
+            (ys[currRowIndex] +
+              (x +
+                xs[++currRowIndex] +
+                xs[++prevRowIndex] +
+                xs[++nextRowIndex])) *
+            0.25;
+        }
+      }
+    }
   }
 
   private project(axs: number[], ays: number[], bxs: number[], bys: number[]) {
-    // hi
+    for (let j = 1; j <= this.h; ++j) {
+      let prevRowIndex = (j - 1) * this.cols;
+      let currRowIndex = j * this.cols;
+      let nextRowIndex = (j + 1) * this.cols;
+
+      let prevIndex = currRowIndex - 1;
+      let nextIndex = currRowIndex + 1;
+
+      for (let i = 1; i <= this.w; ++i) {
+        bys[++currRowIndex] =
+          this.q *
+          (axs[++nextIndex] -
+            axs[++prevIndex] +
+            ays[++nextRowIndex] -
+            ays[++prevRowIndex]);
+        bxs[currRowIndex] = 0;
+      }
+    }
+
+    this.solve(bxs, bys);
+
+    for (let j = 1; j <= this.h; ++j) {
+      let prevRowIndex = (j - 1) * this.cols;
+      let currRowIndex = j * this.cols;
+      let nextRowIndex = (j + 1) * this.cols;
+
+      let prevIndex = currRowIndex - 1;
+      let currIndex = currRowIndex;
+      let nextIndex = currRowIndex + 1;
+
+      for (let i = 1; i <= this.w; ++i) {
+        axs[++currIndex] -= this.hw * (bxs[++nextIndex] - bxs[++prevIndex]);
+        ays[currIndex] -= this.hh * (bxs[++nextRowIndex] - bxs[++prevRowIndex]);
+      }
+    }
   }
 
   private advect(as: number[], bs: number[], xs: number[], ys: number[]) {
