@@ -1,0 +1,9 @@
+{
+  "name": "intergalacticfantastic",
+  "version": "1.0.0",
+  "description": "An entry for the Fantastic Arcade Gamemaking Frenzy 2013 (the theme was Intergalactic Fantastic) @see: http://gamemakingfrenzy.herokuapp.com/",
+  "repository": "git@github.com:mysterycommand/intergalacticfantastic.git",
+  "author": "Matt Hayes <matt@mysterycommand.com>",
+  "license": "MIT",
+  "private": true
+}
