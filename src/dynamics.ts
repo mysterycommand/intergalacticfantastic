@@ -1,4 +1,4 @@
-const { abs, min, sqrt } = Math;
+const { abs, max, min, sqrt } = Math;
 
 export interface Input {
   x: number;
@@ -29,6 +29,8 @@ export class Dynamics {
   private q: number = -0.5 / sqrt(this.w * this.h);
   private hw: number = this.w / 2;
   private hh: number = this.h / 2;
+  private iw: number = this.w * this.ii;
+  private ih: number = this.h * this.ii;
 
   constructor(readonly w: number, readonly h: number) {
     this.cols = w + 2;
@@ -72,7 +74,7 @@ export class Dynamics {
 
       this.bVelocitiesX[cell] = input.dx;
       this.bVelocitiesY[cell] = input.dy;
-      this.bDensities[cell] = 255;
+      this.bDensities[cell] = 25;
     }
   }
 
@@ -156,7 +158,33 @@ export class Dynamics {
   }
 
   private advect(as: number[], bs: number[], xs: number[], ys: number[]) {
-    // hi
+    for (let j = 1; j <= this.h; ++j) {
+      let currRowIndex = j * this.cols;
+
+      for (let i = 1; i <= this.w; ++i) {
+        let x = min(max(0.5, i - this.iw * xs[++currRowIndex]), this.hw);
+        let y = min(max(0.5, j - this.ih * ys[currRowIndex]), this.hh);
+
+        let i0 = x | 0;
+        let i1 = i0 + 1;
+
+        let j0 = y | 0;
+        let j1 = j0 + 1;
+
+        let s1 = x - i0;
+        let s0 = 1 - s1;
+
+        let t1 = y - j0;
+        let t0 = 1 - t1;
+
+        let r1 = j0 * this.cols;
+        let r2 = j1 * this.cols;
+
+        as[currRowIndex] =
+          s0 * (t0 * bs[i0 + r1] + t1 * bs[i0 + r2]) +
+          s1 * (t0 * bs[i1 + r1] + t1 * bs[i1 + r2]);
+      }
+    }
   }
 
   private velocities(
@@ -216,10 +244,10 @@ export class Dynamics {
         const offset = 4 * (j * this.w + i);
         const cell = this.cell(i, j);
 
-        data[offset + 0] = 0;
-        data[offset + 1] = min(abs(this.bVelocitiesX[cell]), 255);
-        data[offset + 2] = min(abs(this.bVelocitiesY[cell]), 255);
-        data[offset + 3] = this.bDensities[cell];
+        // data[offset + 0] = 0;
+        // data[offset + 1] = 0;
+        // data[offset + 2] = 0;
+        data[offset + 3] = this.aDensities[cell];
       }
     }
   }
