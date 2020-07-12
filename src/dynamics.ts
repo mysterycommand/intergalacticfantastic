@@ -79,6 +79,18 @@ export class Dynamics {
     }
   }
 
+  private diffuse(as: number[], bs: number[]) {
+    // hi
+  }
+
+  private project(axs: number[], ays: number[], bxs: number[], bys: number[]) {
+    // hi
+  }
+
+  private advect(as: number[], bs: number[], xs: number[], ys: number[]) {
+    // hi
+  }
+
   private velocities(
     axs: number[],
     ays: number[],
@@ -87,6 +99,28 @@ export class Dynamics {
   ) {
     this.addTo(axs, bxs);
     this.addTo(ays, bys);
+
+    // swap
+    [axs, bxs] = [bxs, axs];
+    [ays, bys] = [bys, ays];
+
+    // diffuse
+    this.diffuse(axs, bxs);
+    // diffuse
+    this.diffuse(ays, bys);
+    // project
+    this.project(axs, ays, bxs, bys);
+
+    // swap
+    [axs, bxs] = [bxs, axs];
+    [ays, bys] = [bys, ays];
+
+    // advect
+    this.advect(axs, bxs, bxs, bys);
+    // advect
+    this.advect(ays, bys, bxs, bys);
+    // project
+    this.project(axs, ays, bxs, bys);
   }
 
   private densities(
@@ -96,6 +130,14 @@ export class Dynamics {
     ays: number[]
   ) {
     this.addTo(ads, bds);
+
+    // swap
+    [ads, bds] = [bds, ads];
+
+    // diffuse
+    this.diffuse(ads, bds);
+    // advect
+    this.advect(ads, bds, axs, ays);
   }
 
   private render(data: Uint8ClampedArray) {
