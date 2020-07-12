@@ -5,5 +5,21 @@
   "repository": "git@github.com:mysterycommand/intergalacticfantastic.git",
   "author": "Matt Hayes <matt@mysterycommand.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf dist",
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html",
+    "tsc": "tsc -p tsconfig.json --noEmit false --outDir dist"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "7.10.4",
+    "@babel/preset-env": "7.10.4",
+    "@babel/preset-typescript": "7.10.4",
+    "parcel": "1.12.4",
+    "prettier": "2.0.5",
+    "sass": "1.26.10",
+    "typescript": "3.9.6"
+  }
 }
