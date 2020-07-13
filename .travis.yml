@@ -7,7 +7,7 @@ cache: yarn
 
 env:
   global:
-    - secure: E1QKQNCt1PqwC66dytG7BINREPBEpCm2Bhg6kqQ30+T2CnVoDmXn5l4qGXOY8FS+CZJF6Q13LYri6y4724VtTXi+/EdxlIymoZ3EwhxZhH1xKW55gAp9C55/qJkTNHmCPfY8UjIHxhqkBovRDWBcQ4OsXjInx1wJ45/OdluGvt4=
+    - secure: LQoikynXr+U0jhOlWAz+0YGzolcGc8B+30qfveZHf+NbtndSZsjzTc3THMUtj904WpDDIlosDEG4DehBhYbIkNrRvfBL8jqM8ljf1rwcVOH9F+Uw5wGdm5dQ7jW182RXYAFoFtXe4aJtcC/h4nl7cYNKjGF33N6XkO17xjDYUj8=
 
 script:
   # We want to gate on passing tests and a successful build
@@ -18,7 +18,7 @@ deploy:
   - provider: pages
     repo: mysterycommand/intergalacticfantastic
     target_branch: master
-    github_token: $GH_OAUTH_TOKEN
+    github_token: $GH_TOKEN
     allow_empty_commit: true
     skip_cleanup: true
     keep_history: true
