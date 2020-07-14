@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html",
+    "build": "parcel build src/index.html --public-url /intergalacticfantastic",
     "tsc": "tsc -p tsconfig.json --noEmit false --outDir dist"
   },
   "dependencies": {},
